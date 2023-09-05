@@ -1,2 +1,12 @@
 #!/bin/bash
-tail -n +2 | cut -f l | sort -k l | uniq -c | sort -rnk l | head -n ll | rev | cut -d ' ' -f l | rev
+
+# Read the input from stdin or from a file if provided as an argument
+input_file="${1:-/dev/stdin}"
+
+# Use awk to extract the host or IP address from the input and count their occurrences
+awk 'NR > 1 { hosts[$1]++ } END { for (host in hosts) print host }' "$input_file" |
+	# Sort the hosts by the number of requests in descending order
+sort -k2,2nr |
+	# Display the top 11 hosts
+head -n 11
+
